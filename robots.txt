@@ -58,4 +58,4 @@ Disallow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://akira-uestc.github.io/sitemap.xml
+Sitemap: https://AkiraLyu.github.io/sitemap.xml
