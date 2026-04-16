@@ -4,7 +4,14 @@
         <link>https://AkiraLyu.github.io/en/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/</link>
         <description>树莓派 - Tag - Akira&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>akira-uestc@gmail.com (Akira)</managingEditor>
-            <webMaster>akira-uestc@gmail.com (Akira)</webMaster><lastBuildDate>Wed, 07 May 2025 01:38:31 &#43;0800</lastBuildDate><atom:link href="https://AkiraLyu.github.io/en/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>akira-uestc@gmail.com (Akira)</webMaster><lastBuildDate>Fri, 17 Apr 2026 01:46:01 &#43;0800</lastBuildDate><atom:link href="https://AkiraLyu.github.io/en/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="self" type="application/rss+xml" /><item>
+    <title>Building a Raspberry Pi Kernel to Run dae</title>
+    <link>https://AkiraLyu.github.io/en/posts/%E6%A0%91%E8%8E%93%E6%B4%BE%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8%E8%BF%90%E8%A1%8Cdae/</link>
+    <pubDate>Fri, 17 Apr 2026 01:46:01 &#43;0800</pubDate><author>
+        <name>Akira</name>
+    </author><guid>https://AkiraLyu.github.io/en/posts/%E6%A0%91%E8%8E%93%E6%B4%BE%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8%E8%BF%90%E8%A1%8Cdae/</guid>
+    <description><![CDATA[Enable the BPF stream parser and BTF support required by dae on Raspberry Pi by cross-compiling a Raspberry Pi 5 kernel from Arch Linux]]></description>
+</item><item>
     <title>树莓派5串口调试</title>
     <link>https://AkiraLyu.github.io/en/posts/%E6%A0%91%E8%8E%93%E6%B4%BE5%E4%B8%B2%E5%8F%A3%E8%B0%83%E8%AF%95/</link>
     <pubDate>Wed, 07 May 2025 01:38:31 &#43;0800</pubDate><author>
