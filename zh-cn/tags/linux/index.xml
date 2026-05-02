@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Linux - 标签 - Akira&#39;s Blog</title>
+        <link>https://AkiraLyu.github.io/zh-cn/tags/linux/</link>
+        <description>Linux - 标签 - Akira&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>akira-uestc@gmail.com (Akira)</managingEditor>
+            <webMaster>akira-uestc@gmail.com (Akira)</webMaster><lastBuildDate>Sat, 02 May 2026 22:24:25 &#43;0800</lastBuildDate><atom:link href="https://AkiraLyu.github.io/zh-cn/tags/linux/" rel="self" type="application/rss+xml" /><item>
+    <title>在 Linux 上绕过 WPS 演示的 FPS 限制</title>
+    <link>https://AkiraLyu.github.io/zh-cn/posts/%E5%9C%A8-linux-%E4%B8%8A%E7%BB%95%E8%BF%87-wps-%E6%BC%94%E7%A4%BA%E7%9A%84fps%E9%99%90%E5%88%B6/</link>
+    <pubDate>Sat, 02 May 2026 22:24:25 &#43;0800</pubDate><author>
+        <name>Akira</name>
+    </author><guid>https://AkiraLyu.github.io/zh-cn/posts/%E5%9C%A8-linux-%E4%B8%8A%E7%BB%95%E8%BF%87-wps-%E6%BC%94%E7%A4%BA%E7%9A%84fps%E9%99%90%E5%88%B6/</guid>
+    <description><![CDATA[记录一次在 Arch Linux 上通过缩放 QElapsedTimer 与 libfaketime 加速，改善 WPS Office PPT 播放帧率。]]></description>
+</item></channel>
+</rss>
