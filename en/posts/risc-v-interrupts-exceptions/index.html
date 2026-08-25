@@ -1,0 +1,238 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><meta name="color-scheme" content="light"><meta name="theme-color" content="#f9f9ff"><meta name="generator" content="Astro v7.2.0"><title>RISC-V Interrupt and Exception Mechanism — Akira&#39;s Blog</title><meta name="description" content="Analyzes the interrupt and exception mechanism of RISC-V, including privilege modes, exception and interrupt types, control and status registers, and the handling process."><meta name="author" content="Akira Lyu"><meta name="robots" content="index, follow"><link rel="canonical" href="https://www.akira-uestc.site/en/posts/risc-v-interrupts-exceptions/"><link rel="alternate" hreflang="zh-CN" href="https://www.akira-uestc.site/posts/risc-v-interrupts-exceptions/"><link rel="alternate" hreflang="en" href="https://www.akira-uestc.site/en/posts/risc-v-interrupts-exceptions/"><link rel="alternate" hreflang="x-default" href="https://www.akira-uestc.site/posts/risc-v-interrupts-exceptions/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Akira's Blog RSS" href="https://www.akira-uestc.site/en/rss.xml"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:site_name" content="Akira's Blog"><meta property="og:type" content="article"><meta property="og:title" content="RISC-V Interrupt and Exception Mechanism — Akira's Blog"><meta property="og:description" content="Analyzes the interrupt and exception mechanism of RISC-V, including privilege modes, exception and interrupt types, control and status registers, and the handling process."><meta property="og:url" content="https://www.akira-uestc.site/en/posts/risc-v-interrupts-exceptions/"><meta name="twitter:card" content="summary"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.DW-LBy1z.js"></script><link rel="stylesheet" href="/_astro/BaseLayout.B-qnCkLL.css"><link rel="stylesheet" href="/_astro/PublicEntryPage.C1XoTQp8.css"></head><body><a class="skip-link" href="#main-content">Skip to content</a><header class="site-header" data-pagefind-ignore="all"><input class="site-nav-toggle" id="site-nav-toggle" type="checkbox" aria-label="Primary navigation" aria-controls="site-navigation-panel"><label class="site-menu-toggle" for="site-nav-toggle"><span>Akira&#39;s Blog</span><i class="bi bi-list" aria-hidden="true"></i><i class="bi bi-x-lg" aria-hidden="true"></i></label><div class="site-header__inner" id="site-navigation-panel"><a class="site-brand" href="/en/" aria-label="Akira's Blog Home"><img src="/images/avatar.webp" alt="Portrait of Akira Lyu" width="512" height="512"><span class="site-mark">Akira&#39;s Blog</span></a><p class="site-slogan"><span>図書室でしか見たことない世界</span><span>確かめたい</span></p><ul class="site-social-links" aria-label="Subscription and contact links"><li><a href="/en/rss.xml" data-transition-social="rss" aria-label="RSS" title="RSS"><i class="bi bi-rss" aria-hidden="true"></i></a></li><li><a href="mailto:akira.uestc@gmail.com" data-transition-social="email" aria-label="Email" title="Email"><i class="bi bi-envelope-fill" aria-hidden="true"></i></a></li><li><a href="https://github.com/AkiraLyu" data-transition-social="github" aria-label="GitHub" title="GitHub"><i class="bi bi-github" aria-hidden="true"></i></a></li></ul><nav class="site-navigation" aria-label="Primary navigation"><ul class="site-nav"><li><a href="/en/posts/" data-transition-nav="posts" aria-current="page"><i class="bi bi-file-earmark-text" aria-hidden="true"></i><span>Posts</span></a></li><li><a href="/en/thoughts/" data-transition-nav="thoughts"><i class="bi bi-chat-left-text" aria-hidden="true"></i><span>Thoughts</span></a></li><li><a href="/en/categories/" data-transition-nav="categories"><i class="bi bi-folder2-open" aria-hidden="true"></i><span>Categories</span></a></li><li><a href="/en/tags/" data-transition-nav="tags"><i class="bi bi-tags" aria-hidden="true"></i><span>Tags</span></a></li><li><a href="/en/friends/" data-transition-nav="friends"><i class="bi bi-link-45deg" aria-hidden="true"></i><span>Links</span></a></li><li><a href="/en/about/" data-transition-nav="about"><i class="bi bi-person" aria-hidden="true"></i><span>About</span></a></li><li><a href="/en/search/" data-transition-nav="search"><i class="bi bi-search" aria-hidden="true"></i><span>Search</span></a></li><li class="site-nav__language"><a href="/posts/risc-v-interrupts-exceptions/" data-transition-nav="language" hreflang="zh" lang="zh"><i class="bi bi-translate" aria-hidden="true"></i><span>中文</span></a></li></ul></nav></div><label class="site-nav-overlay" for="site-nav-toggle" aria-hidden="true"></label></header><div class="site-content"><main id="main-content" class="page-shell article-page"><article data-pagefind-body data-pagefind-meta="type:Article" data-pagefind-filter="type:Article"><header class="article-header"><h1 data-pagefind-meta="title">RISC-V Interrupt and Exception Mechanism</h1><p class="article-deck" data-pagefind-meta="description">Analyzes the interrupt and exception mechanism of RISC-V, including privilege modes, exception and interrupt types, control and status registers, and the handling process.</p><span data-pagefind-meta="date:2025-02-19T00:00:00.000Z" hidden></span><div class="article-meta" data-astro-cid-pu3vu6e3><p class="meta" data-astro-cid-pu3vu6e3><span data-astro-cid-pu3vu6e3>Published <time datetime="2025-02-19T00:00:00.000Z" data-astro-cid-pu3vu6e3>February 19, 2025</time></span><span data-astro-cid-pu3vu6e3>Last updated <time datetime="2025-02-19T00:00:00.000Z" data-astro-cid-pu3vu6e3>February 19, 2025</time></span><span data-astro-cid-pu3vu6e3>Category <a href="/en/categories/systems/" data-astro-cid-pu3vu6e3>Systems</a></span></p><ul class="tag-list" aria-label="Tags" data-astro-cid-cm3albtb><li data-astro-cid-cm3albtb><a href="/en/tags/risc-v/" data-astro-cid-cm3albtb>RISC-V</a></li><li data-astro-cid-cm3albtb><a href="/en/tags/isa/" data-astro-cid-cm3albtb>ISA</a></li><li data-astro-cid-cm3albtb><a href="/en/tags/systems/" data-astro-cid-cm3albtb>Systems</a></li></ul></div></header><div class="article-grid"><div class="article-main"><aside class="article-notice stale-article-notice" role="note" aria-label="This article may be outdated" data-astro-cid-gbnxyfdb><i class="bi bi-exclamation-triangle-fill" aria-hidden="true" data-astro-cid-gbnxyfdb></i><div data-astro-cid-gbnxyfdb><strong data-astro-cid-gbnxyfdb>This article may be outdated</strong><p data-astro-cid-gbnxyfdb>This article was last updated on February 19, 2025, at least a year ago. Check it against current versions and documentation before relying on it.</p></div></aside><aside class="article-notice machine-translation-notice" role="note" aria-label="Machine-translated article" data-astro-cid-3ajcepjy><i class="bi bi-translate" aria-hidden="true" data-astro-cid-3ajcepjy></i><div data-astro-cid-3ajcepjy><strong data-astro-cid-3ajcepjy>Machine-translated article</strong><p data-astro-cid-3ajcepjy>This English version was translated from Chinese by a large language model and may contain inaccuracies or omissions. <a href="/posts/risc-v-interrupts-exceptions/" data-astro-cid-3ajcepjy>Read the original Chinese article</a></p></div></aside><div class="prose"><h2 id="privilege-modes"><a class="heading-anchor" href="#privilege-modes">Privilege Modes</a></h2>
+<p>RISC-V defines three privilege modes. Different combinations of these modes enable various system functionalities.</p>
+<ul>
+<li>
+<p><strong>Machine Mode</strong></p>
+<p>M-mode is the highest privilege level executable by a hardware thread (hart). It can access all resources and memory, supports system initialization and configuration (must be implemented), and is the only mode in most embedded systems.</p>
+</li>
+<li>
+<p><strong>User Mode</strong></p>
+<p>Only allows execution of general-purpose instructions, not privileged ones. In U-mode, when an exception occurs, the system automatically jumps to M-mode to execute the exception handler. It can also trap into M-mode using the <code>ecall</code> instruction and return using the <code>mret</code> privileged instruction.</p>
+</li>
+<li>
+<p><strong>Supervisor Mode</strong></p>
+<p>S-mode supports memory protection and is where the OS kernel runs. S-mode programs cannot use M-mode CSRs and privileged instructions but can use S-mode-specific ones like <code>sret</code>.</p>
+</li>
+</ul>
+<p>RISCV privilege mode bits: 00 → U-mode; 01 → S-mode; 11 → M-mode</p>
+<blockquote>
+<p>M-mode exception handlers can forward exceptions to S-mode, but this reduces performance. Therefore, <code>mideleg</code> (Machine Interrupt Delegation) CSR is used to delegate certain interrupts to S-mode.</p>
+</blockquote>
+<blockquote>
+<p>Lower privilege levels can be entered by configuring <code>mstatus</code> or <code>sstatus</code> and using <code>mret</code>, <code>sret</code>, and higher privilege levels can be entered via <code>ecall</code>.</p>
+</blockquote>
+<h2 id="exception-and-interrupt-types"><a class="heading-anchor" href="#exception-and-interrupt-types">Exception and Interrupt Types</a></h2>
+<p>Events that interrupt the normal execution of a program on RISC-V CPUs include exceptions and interrupts.</p>
+<h3 id="exceptions"><a class="heading-anchor" href="#exceptions">Exceptions</a></h3>
+<ul>
+<li>
+<p><strong>Faults</strong>:</p>
+<p>Detected between the start and completion of an instruction, e.g., illegal opcode during decoding, page fault on fetching or loading data, divide-by-zero error. These are unrecoverable and terminate the process.</p>
+</li>
+<li>
+<p><strong>Traps</strong>:</p>
+<p>Intentionally triggered via special instructions or control flags in a program. Upon meeting certain conditions, control transfers to a handler. After processing, execution resumes at the next instruction.</p>
+</li>
+<li>
+<p><strong>Termination</strong>:</p>
+<p>Caused by controller failure or memory errors. These are random and not tied to a specific instruction, leading to the termination of the faulty process.</p>
+</li>
+</ul>
+<h3 id="interrupts"><a class="heading-anchor" href="#interrupts">Interrupts</a></h3>
+<p>While executing, the CPU may receive interrupt requests from peripherals or other sources. The CPU checks for interrupts after each instruction. If one is pending, it saves the next instruction address and jumps to the appropriate interrupt handler. Execution resumes after the handler completes.</p>
+<ul>
+<li>
+<p><strong>External</strong>:</p>
+<p>Originating from off-core devices. Interrupt numbers in S-mode and M-mode are 9 and 11, respectively. The Platform-Level Interrupt Controller (PLIC) handles multiple sources and arbitrates priority.</p>
+</li>
+<li>
+<p><strong>Timer</strong>:</p>
+<p>In M-mode, the system defines two 64-bit memory-mapped registers, <code>mtime</code> and <code>mtimecmp</code>. When <code>mtime</code> exceeds <code>mtimecmp</code>, an M-mode timer interrupt (code 7) is triggered. In S-mode, the corresponding code is 5.</p>
+</li>
+<li>
+<p><strong>Software</strong>:</p>
+<p>Software interrupts in S-mode and M-mode are 1 and 3, respectively. Writing 1 to the memory-mapped <code>msip</code> register in M-mode triggers a software interrupt. Typically used for inter-hart communication.</p>
+</li>
+<li>
+<p><strong>Debug</strong>:</p>
+<p>Debug interrupt requests are sent from a remote host to the processor.</p>
+</li>
+</ul>
+<h2 id="control-and-status-registers-csrs"><a class="heading-anchor" href="#control-and-status-registers-csrs">Control and Status Registers (CSRs)</a></h2>
+<p>CSRs are internal processor registers with 12-bit addresses. They are independent of memory and general-purpose register address spaces. In a 64-bit architecture, each is 8 bytes; in 32-bit, 4 bytes.</p>
+<p>In 32-bit M-mode, the following CSRs are related to interrupts and exceptions:</p>
+<ul>
+<li>
+<p><strong>mstatus</strong></p>
+<p>M-mode status register with over 20 fields. <code>MIE</code> is the global interrupt enable bit. U and S modes use <code>UIE</code>, <code>SIE</code>. <code>MPIE</code> stores the previous interrupt enable state. <code>MPP</code> stores the privilege mode before the exception/interrupt.</p>
+</li>
+<li>
+<p><strong>mcause</strong></p>
+<p>M-mode cause register with fields for <code>Interrupt</code> and <code>Exception Code</code> (CAUSE). The table below lists codes for various exceptions and interrupts.</p>
+</li>
+<li>
+<p><strong>mtvec</strong></p>
+<p>M-mode trap-vector base address register with a 30-bit BASE and 2-bit MODE. MODE=00 jumps to BASE; MODE=01 jumps to BASE + CAUSE × 4.</p>
+</li>
+<li>
+<p><strong>mepc</strong></p>
+<p>M-mode exception/interrupt return address. For traps, the handler must increment <code>mepc</code> to point to the next instruction to avoid re-execution.</p>
+</li>
+<li>
+<p><strong>mtval</strong></p>
+<p>M-mode trap value register that stores auxiliary info related to the exception, such as the faulting address or instruction.</p>
+</li>
+<li>
+<p><strong>mie</strong></p>
+<p>M-mode interrupt enable register. Fields <code>MMIE</code>, <code>MTIE</code>, and <code>MSIE</code> enable external, timer, and software interrupts respectively (requires <code>mstatus.MIE</code> to be 1).</p>
+</li>
+<li>
+<p><strong>mip</strong></p>
+<p>M-mode interrupt pending register with fields <code>MEIP</code>, <code>MTIP</code>, and <code>MSIP</code>.</p>
+</li>
+</ul>
+<p>Exception/Interrupt Codes:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Interrupt</th><th>Exception Code</th><th>Description</th></tr></thead><tbody><tr><td>1</td><td>1</td><td>S-mode software interrupt</td></tr><tr><td>1</td><td>3</td><td>M-mode software interrupt</td></tr><tr><td>1</td><td>5</td><td>S-mode timer interrupt</td></tr><tr><td>1</td><td>7</td><td>M-mode timer interrupt</td></tr><tr><td>1</td><td>9</td><td>S-mode external interrupt</td></tr><tr><td>1</td><td>11</td><td>M-mode external interrupt</td></tr><tr><td>0</td><td>0</td><td>Instruction address misaligned</td></tr><tr><td>0</td><td>1</td><td>Instruction access fault</td></tr><tr><td>0</td><td>2</td><td>Illegal instruction</td></tr><tr><td>0</td><td>3</td><td>Breakpoint (<code>ebreak</code>)</td></tr><tr><td>0</td><td>4</td><td>Load address misaligned</td></tr><tr><td>0</td><td>5</td><td>Load access fault</td></tr><tr><td>0</td><td>6</td><td>Store/AMO address misaligned</td></tr><tr><td>0</td><td>7</td><td>Store/AMO access fault</td></tr><tr><td>0</td><td>8</td><td><code>ecall</code> from U-mode</td></tr><tr><td>0</td><td>9</td><td><code>ecall</code> from S-mode</td></tr><tr><td>0</td><td>10</td><td>reserved</td></tr><tr><td>0</td><td>11</td><td><code>ecall</code> from M-mode</td></tr><tr><td>0</td><td>12</td><td>Instruction page fault</td></tr><tr><td>0</td><td>13</td><td>Load page fault</td></tr><tr><td>0</td><td>14</td><td>reserved</td></tr><tr><td>0</td><td>15</td><td>Store/AMO page fault</td></tr></tbody></table>
+<h2 id="handling-process"><a class="heading-anchor" href="#handling-process">Handling Process</a></h2>
+<h3 id="hardware-response-phase"><a class="heading-anchor" href="#hardware-response-phase">Hardware Response Phase</a></h3>
+<p>In M-mode, the response to an interrupt/exception includes:</p>
+<ul>
+<li>Updating CSRs: <code>mcause</code>, <code>mepc</code>, and <code>mtval</code></li>
+<li>Updating relevant <code>mstatus</code> fields to store previous global interrupt state and privilege level (<code>MIE</code>, <code>MPP</code>), and disabling <code>MIE</code></li>
+<li>Setting PC to the address in <code>mtvec</code> and jumping to the handler</li>
+</ul>
+<h3 id="software-handling-phase"><a class="heading-anchor" href="#software-handling-phase">Software Handling Phase</a></h3>
+<p>M-mode exception/interrupt handlers perform:</p>
+<ul>
+<li>Saving context/state</li>
+<li>Using <code>mcause</code> to determine the cause and dispatch to the appropriate subroutine</li>
+<li>Restoring context and returning via <code>mret</code>, which:
+<ul>
+<li>Sets <code>mstatus.MIE</code> = <code>MPIE</code></li>
+<li>Sets <code>MPIE</code> = 1</li>
+<li>Sets privilege level = <code>MPP</code></li>
+<li>Sets <code>MPP</code> = 00</li>
+<li>Loads PC = <code>mepc</code> to resume execution</li>
+</ul>
+</li>
+</ul></div><nav class="article-pagination no-print" aria-label="Adjacent posts"><div><span>Previous</span><a href="/en/posts/simple-shell-in-c/">Writing a Simple Shell in C</a></div><div><span>Next</span><a href="/en/posts/ros-gazebo-rviz-xwayland-docker/">Running ros+gazebo+rviz with xwayland</a></div></nav></div><nav class="toc no-print" aria-labelledby="toc-title" data-astro-cid-p33bl5ka><h2 id="toc-title" data-astro-cid-p33bl5ka>Contents</h2><ol data-astro-cid-p33bl5ka><li class="toc-depth-2" data-astro-cid-p33bl5ka><a href="#privilege-modes" data-astro-cid-p33bl5ka>Privilege Modes</a></li><li class="toc-depth-2" data-astro-cid-p33bl5ka><a href="#exception-and-interrupt-types" data-astro-cid-p33bl5ka>Exception and Interrupt Types</a></li><li class="toc-depth-3" data-astro-cid-p33bl5ka><a href="#exceptions" data-astro-cid-p33bl5ka>Exceptions</a></li><li class="toc-depth-3" data-astro-cid-p33bl5ka><a href="#interrupts" data-astro-cid-p33bl5ka>Interrupts</a></li><li class="toc-depth-2" data-astro-cid-p33bl5ka><a href="#control-and-status-registers-csrs" data-astro-cid-p33bl5ka>Control and Status Registers (CSRs)</a></li><li class="toc-depth-2" data-astro-cid-p33bl5ka><a href="#handling-process" data-astro-cid-p33bl5ka>Handling Process</a></li><li class="toc-depth-3" data-astro-cid-p33bl5ka><a href="#hardware-response-phase" data-astro-cid-p33bl5ka>Hardware Response Phase</a></li><li class="toc-depth-3" data-astro-cid-p33bl5ka><a href="#software-handling-phase" data-astro-cid-p33bl5ka>Software Handling Phase</a></li></ol></nav></div></article></main></div></body></html>

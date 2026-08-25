@@ -1,0 +1,195 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><meta name="color-scheme" content="light"><meta name="theme-color" content="#f9f9ff"><meta name="generator" content="Astro v7.2.0"><title>树莓派5串口调试 — Akira&#39;s Blog</title><meta name="description" content="在树莓派5上使用串口与外部设备通信时碰到的问题及解决方法"><meta name="author" content="Akira Lyu"><meta name="robots" content="index, follow"><link rel="canonical" href="https://www.akira-uestc.site/posts/raspberry-pi-5-serial-debugging/"><link rel="alternate" hreflang="zh-CN" href="https://www.akira-uestc.site/posts/raspberry-pi-5-serial-debugging/"><link rel="alternate" hreflang="x-default" href="https://www.akira-uestc.site/posts/raspberry-pi-5-serial-debugging/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Akira's Blog RSS" href="https://www.akira-uestc.site/rss.xml"><meta property="og:locale" content="zh_CN"><meta property="og:site_name" content="Akira's Blog"><meta property="og:type" content="article"><meta property="og:title" content="树莓派5串口调试 — Akira's Blog"><meta property="og:description" content="在树莓派5上使用串口与外部设备通信时碰到的问题及解决方法"><meta property="og:url" content="https://www.akira-uestc.site/posts/raspberry-pi-5-serial-debugging/"><meta name="twitter:card" content="summary"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.DW-LBy1z.js"></script><link rel="stylesheet" href="/_astro/BaseLayout.B-qnCkLL.css"><link rel="stylesheet" href="/_astro/PublicEntryPage.C1XoTQp8.css"></head><body><a class="skip-link" href="#main-content">跳到正文</a><header class="site-header" data-pagefind-ignore="all"><input class="site-nav-toggle" id="site-nav-toggle" type="checkbox" aria-label="主导航" aria-controls="site-navigation-panel"><label class="site-menu-toggle" for="site-nav-toggle"><span>Akira&#39;s Blog</span><i class="bi bi-list" aria-hidden="true"></i><i class="bi bi-x-lg" aria-hidden="true"></i></label><div class="site-header__inner" id="site-navigation-panel"><a class="site-brand" href="/" aria-label="Akira's Blog 首页"><img src="/images/avatar.webp" alt="Akira Lyu 的头像" width="512" height="512"><span class="site-mark">Akira&#39;s Blog</span></a><p class="site-slogan"><span>図書室でしか見たことない世界</span><span>確かめたい</span></p><ul class="site-social-links" aria-label="订阅与联系方式"><li><a href="/rss.xml" data-transition-social="rss" aria-label="RSS" title="RSS"><i class="bi bi-rss" aria-hidden="true"></i></a></li><li><a href="mailto:akira.uestc@gmail.com" data-transition-social="email" aria-label="Email" title="Email"><i class="bi bi-envelope-fill" aria-hidden="true"></i></a></li><li><a href="https://github.com/AkiraLyu" data-transition-social="github" aria-label="GitHub" title="GitHub"><i class="bi bi-github" aria-hidden="true"></i></a></li></ul><nav class="site-navigation" aria-label="主导航"><ul class="site-nav"><li><a href="/posts/" data-transition-nav="posts" aria-current="page"><i class="bi bi-file-earmark-text" aria-hidden="true"></i><span>文章</span></a></li><li><a href="/thoughts/" data-transition-nav="thoughts"><i class="bi bi-chat-left-text" aria-hidden="true"></i><span>随想</span></a></li><li><a href="/categories/" data-transition-nav="categories"><i class="bi bi-folder2-open" aria-hidden="true"></i><span>分类</span></a></li><li><a href="/tags/" data-transition-nav="tags"><i class="bi bi-tags" aria-hidden="true"></i><span>标签</span></a></li><li><a href="/friends/" data-transition-nav="friends"><i class="bi bi-link-45deg" aria-hidden="true"></i><span>友链</span></a></li><li><a href="/about/" data-transition-nav="about"><i class="bi bi-person" aria-hidden="true"></i><span>关于</span></a></li><li><a href="/search/" data-transition-nav="search"><i class="bi bi-search" aria-hidden="true"></i><span>搜索</span></a></li><li class="site-nav__language"><a href="/en/posts/" data-transition-nav="language" hreflang="en" lang="en"><i class="bi bi-translate" aria-hidden="true"></i><span>EN</span></a></li></ul></nav></div><label class="site-nav-overlay" for="site-nav-toggle" aria-hidden="true"></label></header><div class="site-content"><main id="main-content" class="page-shell article-page"><article data-pagefind-body data-pagefind-meta="type:文章" data-pagefind-filter="type:文章"><header class="article-header"><h1 data-pagefind-meta="title">树莓派5串口调试</h1><p class="article-deck" data-pagefind-meta="description">在树莓派5上使用串口与外部设备通信时碰到的问题及解决方法</p><span data-pagefind-meta="date:2025-05-07T00:00:00.000Z" hidden></span><div class="article-meta" data-astro-cid-pu3vu6e3><p class="meta" data-astro-cid-pu3vu6e3><span data-astro-cid-pu3vu6e3>发布 <time datetime="2025-05-07T00:00:00.000Z" data-astro-cid-pu3vu6e3>2025年5月7日</time></span><span data-astro-cid-pu3vu6e3>最后修改 <time datetime="2025-05-07T00:00:00.000Z" data-astro-cid-pu3vu6e3>2025年5月7日</time></span><span data-astro-cid-pu3vu6e3>分类 <a href="/categories/嵌入式/" data-astro-cid-pu3vu6e3>嵌入式</a></span></p><ul class="tag-list" aria-label="标签" data-astro-cid-cm3albtb><li data-astro-cid-cm3albtb><a href="/tags/raspberry-pi/" data-astro-cid-cm3albtb>Raspberry Pi</a></li><li data-astro-cid-cm3albtb><a href="/tags/serial/" data-astro-cid-cm3albtb>Serial</a></li><li data-astro-cid-cm3albtb><a href="/tags/embedded/" data-astro-cid-cm3albtb>Embedded</a></li></ul></div></header><div class="article-grid"><div class="article-main"><aside class="article-notice stale-article-notice" role="note" aria-label="内容可能已经过时" data-astro-cid-gbnxyfdb><i class="bi bi-exclamation-triangle-fill" aria-hidden="true" data-astro-cid-gbnxyfdb></i><div data-astro-cid-gbnxyfdb><strong data-astro-cid-gbnxyfdb>内容可能已经过时</strong><p data-astro-cid-gbnxyfdb>本文最后修改于 2025年5月7日，距今已至少一年。请结合当前版本和最新资料核对后使用。</p></div></aside><div class="prose"><p>在完成一个物联网项目时，尝试以stm32作为数据采集设备，通过树莓派与stm32通信</p>
+<h2 id="配置"><a class="heading-anchor" href="#配置">配置</a></h2>
+<p>我们需要通过raspi_config禁止串口登陆以释放串口设备给程序使用，同时保留硬件串口</p>
+<p>运行 <code>sudo raspi_config</code>，选择 <code>Interface Options</code></p>
+<p><img alt="menu" loading="lazy" decoding="async" width="1200" height="720" src="/_astro/entry.T9Vh4i5g_25xYPu.webp" srcset=""></p>
+<p>选择 <code>Serial Port</code></p>
+<p><img alt="menu" loading="lazy" decoding="async" width="1200" height="720" src="/_astro/serial.CTfdJGIG_Z20WMhc.webp" srcset=""></p>
+<p>随后在提示符 <code>Would you like a login shell to be accessible over serial?</code>下选择 <code>No</code></p>
+<p>在提示符 <code>Would you like the serial port hardware to be enabled?</code>下选择Yes</p>
+<p>保存退出并重启树莓派</p>
+<p>打开并编辑 <code>/boot/firmeare/config.txt</code>，将文件末尾修改如下：</p>
+<pre class="astro-code github-dark-high-contrast" style="background-color:#0a0c10;color:#f0f3f6; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="txt"><code><span class="line"><span>[all]</span></span>
+<span class="line"><span>dtoverlay=uart0-pi5</span></span></code></pre>
+<p>若要使用其他次UART也可考虑禁用蓝牙控制器</p>
+<h2 id="问题"><a class="heading-anchor" href="#问题">问题</a></h2>
+<p>根据<a href="https://www.raspberrypi.com/documentation/computers/configuration.html#configure-uarts">树莓派官网介绍</a>：树莓派5包含5个PL011 UART，不包含mini UART，除 <code>UART0</code>外其他默认情况下禁用。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>ID</th><th>类型</th></tr></thead><tbody><tr><td>UART0</td><td>PL011</td></tr><tr><td>UART1</td><td>PL011</td></tr><tr><td>UART2</td><td>PL011</td></tr><tr><td>UART3</td><td>PL011</td></tr><tr><td>UART4</td><td>PL011</td></tr></tbody></table>
+<p>在树莓派上，一个 UART 通过 GPIO 14（发送）和 15（接收），即主UART。默认情况下，这也是 Linux 控制台可能存在的 UART</p>
+<p>文档这里将树莓派5的主UART标为UART10，而后在介绍Linux设备时说：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Linux设备</th><th>描述</th></tr></thead><tbody><tr><td>/dev/ttyAMA0</td><td>UART0</td></tr><tr><td>/dev/serial0</td><td>主UART0</td></tr><tr><td>/dev/ttyAMA10</td><td>调试UART</td></tr></tbody></table>
+<p>同时又在下面指出 <code>/dev/serial0</code>会通过符号链接指向 <code>/dev/ttyAMA0</code>(因为树莓派5不包含mini UART)</p>
+<p>实际上，查看 <code>/dev/</code>可以看到：</p>
+<pre class="astro-code github-dark-high-contrast" style="background-color:#0a0c10;color:#f0f3f6; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#FFB757">$</span><span style="color:#ADDCFF"> ll</span><span style="color:#FF9492"> |</span><span style="color:#FFB757"> grep</span><span style="color:#ADDCFF"> ttyAMA</span></span>
+<span class="line"><span style="color:#FFB757">lrwxrwxrwx</span><span style="color:#91CBFF"> 1</span><span style="color:#ADDCFF"> root</span><span style="color:#ADDCFF"> root</span><span style="color:#91CBFF">           8</span><span style="color:#ADDCFF"> May</span><span style="color:#91CBFF">  6</span><span style="color:#ADDCFF"> 23:03</span><span style="color:#ADDCFF"> serial0</span><span style="color:#F0F3F6"> -</span><span style="color:#FF9492">></span><span style="color:#ADDCFF"> ttyAMA10</span></span>
+<span class="line"><span style="color:#FFB757">crw-rw----</span><span style="color:#91CBFF"> 1</span><span style="color:#ADDCFF"> root</span><span style="color:#ADDCFF"> dialout</span><span style="color:#ADDCFF"> 204,</span><span style="color:#91CBFF">  64</span><span style="color:#ADDCFF"> May</span><span style="color:#91CBFF">  6</span><span style="color:#ADDCFF"> 23:15</span><span style="color:#ADDCFF"> ttyAMA0</span></span>
+<span class="line"><span style="color:#FFB757">crw-rw----</span><span style="color:#91CBFF"> 1</span><span style="color:#ADDCFF"> root</span><span style="color:#ADDCFF"> dialout</span><span style="color:#ADDCFF"> 204,</span><span style="color:#91CBFF">  74</span><span style="color:#ADDCFF"> May</span><span style="color:#91CBFF">  6</span><span style="color:#ADDCFF"> 23:07</span><span style="color:#ADDCFF"> ttyAMA10</span></span></code></pre>
+<p>使用 <code>/dev/serial0</code>通常是一个安全的选择，但它似乎被错误指向了 <code>/dev/ttyAMA10</code>，这是板上SH1.0的3p端口。因此在调试UART时，若希望不禁用蓝牙连接而使用三针UART，应直接使用 <code>/dev/ttyAMA0</code>这个设备来访问UART0</p>
+<h2 id="程序"><a class="heading-anchor" href="#程序">程序</a></h2>
+<p>串口配置：</p>
+<pre class="astro-code github-dark-high-contrast" style="background-color:#0a0c10;color:#f0f3f6; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#FF9492">int</span><span style="color:#DBB7FF"> configure_serial</span><span style="color:#F0F3F6">(</span><span style="color:#FF9492">int</span><span style="color:#FFB757"> fd</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#FF9492">    struct</span><span style="color:#F0F3F6"> termios options{};</span></span>
+<span class="line"><span style="color:#FF9492">    if</span><span style="color:#F0F3F6"> (</span><span style="color:#DBB7FF">tcgetattr</span><span style="color:#F0F3F6">(fd, </span><span style="color:#FF9492">&#x26;</span><span style="color:#F0F3F6">options) </span><span style="color:#FF9492">&#x3C;</span><span style="color:#91CBFF"> 0</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#DBB7FF">        perror</span><span style="color:#F0F3F6">(</span><span style="color:#ADDCFF">"获取串口属性失败"</span><span style="color:#F0F3F6">);</span></span>
+<span class="line"><span style="color:#FF9492">        return</span><span style="color:#FF9492"> -</span><span style="color:#91CBFF">1</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#DBB7FF">    cfmakeraw</span><span style="color:#F0F3F6">(</span><span style="color:#FF9492">&#x26;</span><span style="color:#F0F3F6">options);</span></span>
+<span class="line"><span style="color:#DBB7FF">    cfsetispeed</span><span style="color:#F0F3F6">(</span><span style="color:#FF9492">&#x26;</span><span style="color:#F0F3F6">options, B115200);</span></span>
+<span class="line"><span style="color:#DBB7FF">    cfsetospeed</span><span style="color:#F0F3F6">(</span><span style="color:#FF9492">&#x26;</span><span style="color:#F0F3F6">options, B115200);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F0F3F6">    options.c_cflag </span><span style="color:#FF9492">|=</span><span style="color:#F0F3F6"> (CLOCAL </span><span style="color:#FF9492">|</span><span style="color:#F0F3F6"> CREAD);</span><span style="color:#BDC4CC"> // 启用接收</span></span>
+<span class="line"><span style="color:#F0F3F6">    options.c_cflag </span><span style="color:#FF9492">&#x26;=</span><span style="color:#FF9492"> ~</span><span style="color:#F0F3F6">CSTOPB;</span><span style="color:#BDC4CC">          // 1位停止位</span></span>
+<span class="line"><span style="color:#F0F3F6">    options.c_cc[VMIN] </span><span style="color:#FF9492">=</span><span style="color:#91CBFF"> 0</span><span style="color:#F0F3F6">;</span><span style="color:#BDC4CC">  // 接收最小字节数</span></span>
+<span class="line"><span style="color:#F0F3F6">    options.c_cc[VTIME] </span><span style="color:#FF9492">=</span><span style="color:#91CBFF"> 10</span><span style="color:#F0F3F6">;</span><span style="color:#BDC4CC">            // 超时 1 秒（单位0.1s）</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF9492">    if</span><span style="color:#F0F3F6"> (</span><span style="color:#DBB7FF">tcsetattr</span><span style="color:#F0F3F6">(fd, TCSANOW, </span><span style="color:#FF9492">&#x26;</span><span style="color:#F0F3F6">options) </span><span style="color:#FF9492">&#x3C;</span><span style="color:#91CBFF"> 0</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#DBB7FF">        perror</span><span style="color:#F0F3F6">(</span><span style="color:#ADDCFF">"配置串口失败"</span><span style="color:#F0F3F6">);</span></span>
+<span class="line"><span style="color:#FF9492">        return</span><span style="color:#FF9492"> -</span><span style="color:#91CBFF">1</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">    }</span></span>
+<span class="line"><span style="color:#FF9492">    return</span><span style="color:#91CBFF"> 0</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">}</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<p>接收线程，包含字节检测：</p>
+<pre class="astro-code github-dark-high-contrast" style="background-color:#0a0c10;color:#f0f3f6; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#FF9492">void*</span><span style="color:#DBB7FF"> recv_thread</span><span style="color:#F0F3F6">(</span><span style="color:#FF9492">void*</span><span style="color:#FFB757"> arg</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#F0F3F6">    (</span><span style="color:#FF9492">void</span><span style="color:#F0F3F6">)arg;</span></span>
+<span class="line"><span style="color:#FF9492">    while</span><span style="color:#F0F3F6"> (</span><span style="color:#91CBFF">1</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#F0F3F6">        fd_set read_fds;</span></span>
+<span class="line"><span style="color:#FF9492">        struct</span><span style="color:#F0F3F6"> timeval timeout;</span></span>
+<span class="line"><span style="color:#DBB7FF">        FD_ZERO</span><span style="color:#F0F3F6">(</span><span style="color:#FF9492">&#x26;</span><span style="color:#F0F3F6">read_fds);</span></span>
+<span class="line"><span style="color:#DBB7FF">        FD_SET</span><span style="color:#F0F3F6">(serial_fd, </span><span style="color:#FF9492">&#x26;</span><span style="color:#F0F3F6">read_fds);</span></span>
+<span class="line"><span style="color:#F0F3F6">        timeout.tv_sec </span><span style="color:#FF9492">=</span><span style="color:#91CBFF"> 1</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">        timeout.tv_usec </span><span style="color:#FF9492">=</span><span style="color:#91CBFF"> 0</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF9492">        int</span><span style="color:#F0F3F6"> retval </span><span style="color:#FF9492">=</span><span style="color:#DBB7FF"> select</span><span style="color:#F0F3F6">(serial_fd </span><span style="color:#FF9492">+</span><span style="color:#91CBFF"> 1</span><span style="color:#F0F3F6">, </span><span style="color:#FF9492">&#x26;</span><span style="color:#F0F3F6">read_fds, </span><span style="color:#91CBFF">NULL</span><span style="color:#F0F3F6">, </span><span style="color:#91CBFF">NULL</span><span style="color:#F0F3F6">, </span><span style="color:#FF9492">&#x26;</span><span style="color:#F0F3F6">timeout);</span></span>
+<span class="line"><span style="color:#FF9492">        if</span><span style="color:#F0F3F6"> (retval </span><span style="color:#FF9492">==</span><span style="color:#FF9492"> -</span><span style="color:#91CBFF">1</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#DBB7FF">            perror</span><span style="color:#F0F3F6">(</span><span style="color:#ADDCFF">"[recv] select error"</span><span style="color:#F0F3F6">);</span></span>
+<span class="line"><span style="color:#FF9492">            continue</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">        } </span><span style="color:#FF9492">else</span><span style="color:#FF9492"> if</span><span style="color:#F0F3F6"> (retval </span><span style="color:#FF9492">==</span><span style="color:#91CBFF"> 0</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#FF9492">            continue</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF9492">        ssize_t</span><span style="color:#F0F3F6"> read_bytes </span><span style="color:#FF9492">=</span><span style="color:#DBB7FF"> read</span><span style="color:#F0F3F6">(serial_fd, recv_struct, </span><span style="color:#FF9492">sizeof</span><span style="color:#F0F3F6">(Recv));</span></span>
+<span class="line"><span style="color:#FF9492">        if</span><span style="color:#F0F3F6"> (read_bytes </span><span style="color:#FF9492">&#x3C;</span><span style="color:#91CBFF"> 0</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#FF9492">            if</span><span style="color:#F0F3F6"> (errno </span><span style="color:#FF9492">==</span><span style="color:#F0F3F6"> EINTR) </span><span style="color:#FF9492">continue</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#DBB7FF">            perror</span><span style="color:#F0F3F6">(</span><span style="color:#ADDCFF">"[recv] read error"</span><span style="color:#F0F3F6">);</span></span>
+<span class="line"><span style="color:#FF9492">            continue</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">        } </span><span style="color:#FF9492">else</span><span style="color:#FF9492"> if</span><span style="color:#F0F3F6"> (read_bytes </span><span style="color:#FF9492">!=</span><span style="color:#FF9492"> sizeof</span><span style="color:#F0F3F6">(Recv)) {</span></span>
+<span class="line"><span style="color:#DBB7FF">            fprintf</span><span style="color:#F0F3F6">(stderr, </span><span style="color:#ADDCFF">"[recv] 不完整数据 (</span><span style="color:#FF9492">%zd</span><span style="color:#ADDCFF">/</span><span style="color:#FF9492">%zu</span><span style="color:#ADDCFF"> 字节)</span><span style="color:#FF9492">\n</span><span style="color:#ADDCFF">"</span><span style="color:#F0F3F6">,</span></span>
+<span class="line"><span style="color:#F0F3F6">                    read_bytes, </span><span style="color:#FF9492">sizeof</span><span style="color:#F0F3F6">(Recv));</span></span>
+<span class="line"><span style="color:#DBB7FF">            tcflush</span><span style="color:#F0F3F6">(serial_fd, TCIFLUSH);</span></span>
+<span class="line"><span style="color:#FF9492">            continue</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#DBB7FF">        printf</span><span style="color:#F0F3F6">(</span><span style="color:#ADDCFF">"[recv] 收到</span><span style="color:#FF9492">%zd</span><span style="color:#ADDCFF">字节反馈数据</span><span style="color:#FF9492">\n</span><span style="color:#ADDCFF">"</span><span style="color:#F0F3F6">, read_bytes);</span></span>
+<span class="line"><span style="color:#F0F3F6">    }</span></span>
+<span class="line"><span style="color:#FF9492">    return</span><span style="color:#91CBFF"> NULL</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">}</span></span></code></pre>
+<p>发送线程：</p>
+<pre class="astro-code github-dark-high-contrast" style="background-color:#0a0c10;color:#f0f3f6; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#FF9492">void*</span><span style="color:#DBB7FF"> send_thread</span><span style="color:#F0F3F6">(</span><span style="color:#FF9492">void*</span><span style="color:#FFB757"> arg</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#F0F3F6">    (</span><span style="color:#FF9492">void</span><span style="color:#F0F3F6">)arg;</span></span>
+<span class="line"><span style="color:#FF9492">    while</span><span style="color:#F0F3F6"> (</span><span style="color:#91CBFF">1</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#BDC4CC">        // 从服务器获取数据</span></span>
+<span class="line"><span style="color:#DBB7FF">        sync_from_remote</span><span style="color:#F0F3F6">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF9492">        if</span><span style="color:#F0F3F6"> (control_container->mode </span><span style="color:#FF9492">==</span><span style="color:#91CBFF"> 1</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#DBB7FF">            code_light_groups_normal_mode</span><span style="color:#F0F3F6">(light_struct);</span></span>
+<span class="line"><span style="color:#F0F3F6">        } </span><span style="color:#FF9492">else</span><span style="color:#FF9492"> if</span><span style="color:#F0F3F6"> (control_container->mode </span><span style="color:#FF9492">==</span><span style="color:#91CBFF"> 2</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#DBB7FF">            code_light_groups_smart_mode</span><span style="color:#F0F3F6">(car_mgr, light_struct);</span></span>
+<span class="line"><span style="color:#F0F3F6">        } </span><span style="color:#FF9492">else</span><span style="color:#F0F3F6"> {</span></span>
+<span class="line"><span style="color:#DBB7FF">            printf</span><span style="color:#F0F3F6">(</span><span style="color:#ADDCFF">"[send] Invalid mode</span><span style="color:#FF9492">\n</span><span style="color:#ADDCFF">"</span><span style="color:#F0F3F6">);</span></span>
+<span class="line"><span style="color:#DBB7FF">            sleep</span><span style="color:#F0F3F6">(</span><span style="color:#91CBFF">1</span><span style="color:#F0F3F6">);</span></span>
+<span class="line"><span style="color:#FF9492">            continue</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF9492">        ssize_t</span><span style="color:#F0F3F6"> written </span><span style="color:#FF9492">=</span><span style="color:#DBB7FF"> write</span><span style="color:#F0F3F6">(serial_fd, light_struct, </span><span style="color:#FF9492">sizeof</span><span style="color:#F0F3F6">(Light));</span></span>
+<span class="line"><span style="color:#FF9492">        if</span><span style="color:#F0F3F6"> (written </span><span style="color:#FF9492">&#x3C;</span><span style="color:#91CBFF"> 0</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#DBB7FF">            perror</span><span style="color:#F0F3F6">(</span><span style="color:#ADDCFF">"[send] 写入失败"</span><span style="color:#F0F3F6">);</span></span>
+<span class="line"><span style="color:#F0F3F6">        } </span><span style="color:#FF9492">else</span><span style="color:#F0F3F6"> {</span></span>
+<span class="line"><span style="color:#DBB7FF">            printf</span><span style="color:#F0F3F6">(</span><span style="color:#ADDCFF">"[send] 写入</span><span style="color:#FF9492">%zd</span><span style="color:#ADDCFF">字节</span><span style="color:#FF9492">\n</span><span style="color:#ADDCFF">"</span><span style="color:#F0F3F6">, written);</span></span>
+<span class="line"><span style="color:#F0F3F6">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#DBB7FF">        tcflush</span><span style="color:#F0F3F6">(serial_fd, TCOFLUSH);</span></span>
+<span class="line"><span style="color:#DBB7FF">        sleep</span><span style="color:#F0F3F6">(</span><span style="color:#91CBFF">1</span><span style="color:#F0F3F6">);</span><span style="color:#BDC4CC"> // 控制发送间隔</span></span>
+<span class="line"><span style="color:#F0F3F6">    }</span></span>
+<span class="line"><span style="color:#FF9492">    return</span><span style="color:#91CBFF"> NULL</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">}</span></span></code></pre>
+<p>主程序：</p>
+<pre class="astro-code github-dark-high-contrast" style="background-color:#0a0c10;color:#f0f3f6; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#FF9492">#include</span><span style="color:#ADDCFF"> &#x3C;pthread.h></span></span>
+<span class="line"><span style="color:#BDC4CC">// ...</span></span>
+<span class="line"><span style="color:#FF9492">int</span><span style="color:#F0F3F6"> serial_fd </span><span style="color:#FF9492">=</span><span style="color:#FF9492"> -</span><span style="color:#91CBFF">1</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF9492">int</span><span style="color:#DBB7FF"> main</span><span style="color:#F0F3F6">()</span></span>
+<span class="line"><span style="color:#F0F3F6">{</span></span>
+<span class="line"><span style="color:#BDC4CC">    // ...</span></span>
+<span class="line"><span style="color:#BDC4CC">    // 打开串口0</span></span>
+<span class="line"><span style="color:#FF9492">    if</span><span style="color:#F0F3F6"> ((serial_fd </span><span style="color:#FF9492">=</span><span style="color:#DBB7FF"> open</span><span style="color:#F0F3F6">(</span><span style="color:#ADDCFF">"/dev/ttyAMA0"</span><span style="color:#F0F3F6">, O_RDWR </span><span style="color:#FF9492">|</span><span style="color:#F0F3F6"> O_NOCTTY)) </span><span style="color:#FF9492">&#x3C;</span><span style="color:#91CBFF"> 0</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#DBB7FF">        perror</span><span style="color:#F0F3F6">(</span><span style="color:#ADDCFF">"打开串口失败"</span><span style="color:#F0F3F6">);</span></span>
+<span class="line"><span style="color:#FF9492">        return</span><span style="color:#FF9492"> -</span><span style="color:#91CBFF">1</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">    }</span></span>
+<span class="line"><span style="color:#FF9492">    if</span><span style="color:#F0F3F6"> (</span><span style="color:#DBB7FF">configure_serial</span><span style="color:#F0F3F6">(serial_fd) </span><span style="color:#FF9492">&#x3C;</span><span style="color:#91CBFF"> 0</span><span style="color:#F0F3F6">) {</span></span>
+<span class="line"><span style="color:#DBB7FF">        close</span><span style="color:#F0F3F6">(serial_fd);</span></span>
+<span class="line"><span style="color:#FF9492">        return</span><span style="color:#FF9492"> -</span><span style="color:#91CBFF">1</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">    }</span></span>
+<span class="line"><span style="color:#FF9492">    pthread_t</span><span style="color:#F0F3F6"> send_tid, recv_tid;</span></span>
+<span class="line"><span style="color:#DBB7FF">    pthread_create</span><span style="color:#F0F3F6">(</span><span style="color:#FF9492">&#x26;</span><span style="color:#F0F3F6">send_tid, </span><span style="color:#91CBFF">NULL</span><span style="color:#F0F3F6">, send_thread, </span><span style="color:#91CBFF">NULL</span><span style="color:#F0F3F6">);</span></span>
+<span class="line"><span style="color:#DBB7FF">    pthread_create</span><span style="color:#F0F3F6">(</span><span style="color:#FF9492">&#x26;</span><span style="color:#F0F3F6">recv_tid, </span><span style="color:#91CBFF">NULL</span><span style="color:#F0F3F6">, recv_thread, </span><span style="color:#91CBFF">NULL</span><span style="color:#F0F3F6">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#DBB7FF">    pthread_join</span><span style="color:#F0F3F6">(send_tid, </span><span style="color:#91CBFF">NULL</span><span style="color:#F0F3F6">);</span></span>
+<span class="line"><span style="color:#DBB7FF">    pthread_join</span><span style="color:#F0F3F6">(recv_tid, </span><span style="color:#91CBFF">NULL</span><span style="color:#F0F3F6">);</span></span>
+<span class="line"><span style="color:#DBB7FF">    close</span><span style="color:#F0F3F6">(serial_fd);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#BDC4CC">    // ...</span></span>
+<span class="line"><span style="color:#FF9492">    return</span><span style="color:#91CBFF"> 0</span><span style="color:#F0F3F6">;</span></span>
+<span class="line"><span style="color:#F0F3F6">}</span></span></code></pre></div><nav class="article-pagination no-print" aria-label="相邻文章"><div><span>上一篇</span><a href="/posts/engineering-math-notes/">工程数学基础</a></div><div><span>下一篇</span><a href="/posts/pattern-recognition-notes/">模式识别</a></div></nav></div><nav class="toc no-print" aria-labelledby="toc-title" data-astro-cid-p33bl5ka><h2 id="toc-title" data-astro-cid-p33bl5ka>目录</h2><ol data-astro-cid-p33bl5ka><li class="toc-depth-2" data-astro-cid-p33bl5ka><a href="#配置" data-astro-cid-p33bl5ka>配置</a></li><li class="toc-depth-2" data-astro-cid-p33bl5ka><a href="#问题" data-astro-cid-p33bl5ka>问题</a></li><li class="toc-depth-2" data-astro-cid-p33bl5ka><a href="#程序" data-astro-cid-p33bl5ka>程序</a></li></ol></nav></div></article></main></div></body></html>
