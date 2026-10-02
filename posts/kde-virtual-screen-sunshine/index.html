@@ -47,11 +47,12 @@ try {
 <h3 id="注意事项"><a class="heading-anchor" href="#注意事项">注意事项</a></h3>
 <p>如果你使用的 GPU 驱动需要 early kms，即显卡驱动在 initramfs 阶段加载，需要确保将自定义 edid 二进制文件放到 initramfs 镜像中。具体方法请参考的你的发行版说明，以使用 mkinitcpio 的 arch linux为例，在<code>/etc/mkinitcpio.conf</code>中向<code>FILES</code>数组追加一个元素<code>/usr/lib/firmware/edid/edid.bin</code>，再重新生成initramfs即可</p>
 <h2 id="krfb-创建虚拟屏幕"><a class="heading-anchor" href="#krfb-创建虚拟屏幕">Krfb 创建虚拟屏幕</a></h2>
-<p>安装：</p>
+<p>安装 krfb：</p>
 <pre class="astro-code astro-code-themes github-light github-dark-high-contrast" style="--shiki-light:#24292e;--shiki-dark:#f0f3f6;--shiki-light-bg:#fff;--shiki-dark-bg:#0a0c10; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo pacman -S krfb</span></span></code></pre>
-<p>创建：</p>
+<p>创建一个大小为 <code>WIDTH x HEIGHT</code> 的虚拟屏幕：</p>
 <pre class="astro-code astro-code-themes github-light github-dark-high-contrast" style="--shiki-light:#24292e;--shiki-dark:#f0f3f6;--shiki-light-bg:#fff;--shiki-dark-bg:#0a0c10; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>krfb-virtualmonitor --resolution WIDTHxHEIGHT</span></span></code></pre>
-<p>然后在sunshine配置中将捕获后端(Settings -> Advanced -> Force a Specific Capture Method)改成 KWin Screencast</p>
+<p>这应该会创建一个连接器名称为 <code>Virtual-Monitor</code> 的屏幕（可以通过在终端启动 sunshine 查看）</p>
+<p>然后在sunshine配置中将捕获后端 ( Settings -> Advanced -> Force a Specific Capture Method ) 改成 KWin Screencast，并把 Display Id ( Settings -> Audio/Video -> Display ID ) 改成 <code>Virtual-Monitor</code>。</p>
 <h2 id="串流"><a class="heading-anchor" href="#串流">串流</a></h2>
 <p>在终端启动Sunshine，应当可以在日志中看到如下内容</p>
 <pre class="astro-code astro-code-themes github-light github-dark-high-contrast" style="--shiki-light:#24292e;--shiki-dark:#f0f3f6;--shiki-light-bg:#fff;--shiki-dark-bg:#0a0c10; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#F0F3F6">[2025-07-11 18:31:17.267]: Info: Found display [wayland-0]</span></span>

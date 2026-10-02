@@ -49,9 +49,10 @@ try {
 <h2 id="create-a-virtual-display-with-krfb"><a class="heading-anchor" href="#create-a-virtual-display-with-krfb">Create a Virtual Display with Krfb</a></h2>
 <p>Install Krfb:</p>
 <pre class="astro-code astro-code-themes github-light github-dark-high-contrast" style="--shiki-light:#24292e;--shiki-dark:#f0f3f6;--shiki-light-bg:#fff;--shiki-dark-bg:#0a0c10; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#FFB757">sudo</span><span style="--shiki-light:#032F62;--shiki-dark:#ADDCFF"> pacman</span><span style="--shiki-light:#005CC5;--shiki-dark:#91CBFF"> -S</span><span style="--shiki-light:#032F62;--shiki-dark:#ADDCFF"> krfb</span></span></code></pre>
-<p>Create a virtual display:</p>
+<p>Create a virtual display of size <code>WIDTH x HEIGHT</code>:</p>
 <pre class="astro-code astro-code-themes github-light github-dark-high-contrast" style="--shiki-light:#24292e;--shiki-dark:#f0f3f6;--shiki-light-bg:#fff;--shiki-dark-bg:#0a0c10; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#FFB757">krfb-virtualmonitor</span><span style="--shiki-light:#005CC5;--shiki-dark:#91CBFF"> --resolution</span><span style="--shiki-light:#032F62;--shiki-dark:#ADDCFF"> WIDTHxHEIGHT</span></span></code></pre>
-<p>Then, in Sunshine’s settings, change the capture backend under <strong>Settings → Advanced → Force a Specific Capture Method</strong> to <strong>KWin Screencast</strong>.</p>
+<p>This should create a screen whose connector name is <code>Virtual-Monitor</code> (you can check it by starting Sunshine in a terminal).</p>
+<p>Then, in Sunshine’s settings, change the capture backend under <strong>Settings → Advanced → Force a Specific Capture Method</strong> to <strong>KWin Screencast</strong>, and set <strong>Settings → Audio/Video → Display ID</strong> to <code>Virtual-Monitor</code>.</p>
 <h2 id="streaming"><a class="heading-anchor" href="#streaming">Streaming</a></h2>
 <p>Start Sunshine in a terminal. You should see output like this in the logs:</p>
 <pre class="astro-code astro-code-themes github-light github-dark-high-contrast" style="--shiki-light:#24292e;--shiki-dark:#f0f3f6;--shiki-light-bg:#fff;--shiki-dark-bg:#0a0c10; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#F0F3F6">[2025-07-11 18:31:17.267]: Info: Found display [wayland-0]</span></span>
