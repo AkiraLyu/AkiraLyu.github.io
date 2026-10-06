@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.akira-uestc.site/sitemap-index.xml
+Sitemap: https://akiralyu.github.io/sitemap-index.xml
